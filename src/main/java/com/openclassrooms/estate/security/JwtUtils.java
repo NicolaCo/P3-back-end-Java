@@ -6,6 +6,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,8 @@ import java.util.Date;
 
 @Component
 public class JwtUtils {
+
+    private static final Logger log = LoggerFactory.getLogger(JwtUtils.class);
 
     @Value("${jwt.secret}")
     private String secret;
@@ -44,12 +48,18 @@ public class JwtUtils {
             parser.parseSignedClaims(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
+            log.debug("JWT validation failed: {}", e.getMessage());
             return false;
         }
     }
 
     public String getEmailFromToken(String token) {
-        Claims claims = parser.parseSignedClaims(token).getPayload();
-        return claims.getSubject();
+        try {
+            Claims claims = parser.parseSignedClaims(token).getPayload();
+            return claims.getSubject();
+        } catch (JwtException | IllegalArgumentException e) {
+            log.debug("JWT email extraction failed: {}", e.getMessage());
+            return null;
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.openclassrooms.estate.config;
 
+import com.openclassrooms.estate.security.AccessDeniedHandlerImpl;
 import com.openclassrooms.estate.security.AuthEntryPointJwt;
 import com.openclassrooms.estate.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
@@ -16,13 +17,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-public class    SecurityConfig {
+public class SecurityConfig {
 
     private final AuthEntryPointJwt authEntryPoint;
+    private final AccessDeniedHandlerImpl accessDeniedHandler;
     private final JwtAuthenticationFilter jwtFilter;
 
-    public SecurityConfig(AuthEntryPointJwt authEntryPoint, JwtAuthenticationFilter jwtFilter) {
+    public SecurityConfig(AuthEntryPointJwt authEntryPoint,
+                          AccessDeniedHandlerImpl accessDeniedHandler,
+                          JwtAuthenticationFilter jwtFilter) {
         this.authEntryPoint = authEntryPoint;
+        this.accessDeniedHandler = accessDeniedHandler;
         this.jwtFilter = jwtFilter;
     }
 
@@ -31,7 +36,9 @@ public class    SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(authEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/auth/**",

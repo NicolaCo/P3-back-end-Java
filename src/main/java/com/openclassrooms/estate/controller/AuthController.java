@@ -6,7 +6,7 @@ import com.openclassrooms.estate.dto.TokenResponse;
 import com.openclassrooms.estate.dto.UserResponse;
 import com.openclassrooms.estate.model.User;
 import com.openclassrooms.estate.service.AuthService;
-import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.format.DateTimeFormatter;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -30,18 +29,13 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        try {
-            authService.register(request);
-            return ResponseEntity.ok(Map.of("message", "User registered successfully"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(Map.of("error", e.getMessage()));
-        }
+    public ResponseEntity<TokenResponse> register(@Valid @RequestBody RegisterRequest request) {
+        String token = authService.register(request);
+        return ResponseEntity.ok(new TokenResponse(token));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest request) {
         String token = authService.login(request);
         return ResponseEntity.ok(new TokenResponse(token));
     }
