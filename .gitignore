@@ -29,6 +29,9 @@ replay_pid*
 # target
 target
 
+# Uploaded pictures
+src/main/resources/static/images
+
 # Local environment config (contains credentials)
 src/main/resources/application-dev.properties
 
