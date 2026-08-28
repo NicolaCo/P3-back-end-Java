@@ -2,6 +2,7 @@ package com.openclassrooms.estate.handler;
 
 import com.openclassrooms.estate.dto.ErrorResponse;
 import com.openclassrooms.estate.exception.BadRequestException;
+import com.openclassrooms.estate.exception.MessageBadRequestException;
 import com.openclassrooms.estate.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.Instant;
@@ -41,6 +44,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBadRequest(BadRequestException ex) {
         log.warn("Bad request: {}", ex.getMessage());
         return buildResponse(HttpStatus.BAD_REQUEST, "Bad Request", ex.getMessage());
+    }
+
+    @ExceptionHandler(MessageBadRequestException.class)
+    public ResponseEntity<Map<String, String>> handleMessageBadRequest(MessageBadRequestException ex) {
+        log.warn("Invalid message: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of());
     }
 
     @ExceptionHandler(BadCredentialsException.class)
@@ -87,6 +96,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleMissingParam(MissingServletRequestParameterException ex) {
         log.warn("Missing required parameter: {}", ex.getParameterName());
         return buildResponse(HttpStatus.BAD_REQUEST, "Bad Request", "Missing required parameter: " + ex.getParameterName());
+    }
+
+    @ExceptionHandler(MissingServletRequestPartException.class)
+    public ResponseEntity<ErrorResponse> handleMissingPart(MissingServletRequestPartException ex) {
+        log.warn("Missing required part: {}", ex.getRequestPartName());
+        return buildResponse(HttpStatus.BAD_REQUEST, "Bad Request", "Missing required part: " + ex.getRequestPartName());
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ErrorResponse> handleMaxUploadSize(MaxUploadSizeExceededException ex) {
+        log.warn("Upload size exceeded: {}", ex.getMessage());
+        return buildResponse(HttpStatus.BAD_REQUEST, "Bad Request", "File size exceeds the maximum allowed");
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
