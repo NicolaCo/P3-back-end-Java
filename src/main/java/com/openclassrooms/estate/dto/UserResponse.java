@@ -1,5 +1,9 @@
 package com.openclassrooms.estate.dto;
 
+import com.openclassrooms.estate.model.User;
+
+import java.time.format.DateTimeFormatter;
+
 public class UserResponse {
 
     private Integer id;
@@ -14,6 +18,17 @@ public class UserResponse {
         this.name = name;
         this.created_at = createdAt;
         this.updated_at = updatedAt;
+    }
+
+    public static UserResponse from(User user) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        return new UserResponse(
+                user.getId(),
+                user.getEmail(),
+                user.getName(),
+                user.getCreatedAt().format(formatter),
+                user.getUpdatedAt().format(formatter)
+        );
     }
 
     public Integer getId() {

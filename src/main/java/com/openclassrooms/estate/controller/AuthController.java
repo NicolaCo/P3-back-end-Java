@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.format.DateTimeFormatter;
-
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -44,6 +42,6 @@ public class AuthController {
     public ResponseEntity<UserResponse> me() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) auth.getPrincipal();
-        return ResponseEntity.ok(new UserResponse(user.getId(), user.getEmail(), user.getName(), user.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")), user.getUpdatedAt().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))));
+        return ResponseEntity.ok(UserResponse.from(user));
     }
 }
