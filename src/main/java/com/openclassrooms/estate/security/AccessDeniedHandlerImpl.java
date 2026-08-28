@@ -1,36 +1,18 @@
 package com.openclassrooms.estate.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.openclassrooms.estate.dto.ErrorResponse;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.time.Instant;
-
 @Component
 public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void handle(HttpServletRequest request,
                        HttpServletResponse response,
-                       AccessDeniedException accessDeniedException)
-            throws IOException, ServletException {
-
+                       AccessDeniedException accessDeniedException) {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        ErrorResponse body = new ErrorResponse(
-                HttpServletResponse.SC_FORBIDDEN,
-                "Forbidden",
-                "You do not have permission to access this resource",
-                Instant.now());
-        objectMapper.writeValue(response.getOutputStream(), body);
     }
 }
