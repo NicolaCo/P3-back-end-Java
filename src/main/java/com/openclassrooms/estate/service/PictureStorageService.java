@@ -40,6 +40,6 @@ public class PictureStorageService {
         } catch (IOException ex) {
             throw new RuntimeException("Failed to store picture", ex);
         }
-        return "/images/" + filename;
+        return "http://localhost:8080/images/" + filename;
     }
 }
