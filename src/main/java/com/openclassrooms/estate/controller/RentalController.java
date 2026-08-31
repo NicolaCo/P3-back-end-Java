@@ -3,6 +3,9 @@ package com.openclassrooms.estate.controller;
 import com.openclassrooms.estate.dto.RentalResponse;
 import com.openclassrooms.estate.model.User;
 import com.openclassrooms.estate.service.RentalService;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,12 +42,12 @@ public class RentalController {
         return ResponseEntity.ok(rentalService.getById(id));
     }
 
-    @PostMapping
-    public ResponseEntity<Map<String, String>> createRental(@RequestParam String name,
-                                                            @RequestParam Double surface,
-                                                            @RequestParam Double price,
-                                                            @RequestPart("picture") MultipartFile picture,
-                                                            @RequestParam String description) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Map<String, String>> createRental(@Parameter @RequestParam String name,
+                                                            @Parameter @RequestParam Double surface,
+                                                            @Parameter @RequestParam Double price,
+                                                            @Parameter(schema = @Schema(type = "string", format = "binary")) @RequestPart("picture") MultipartFile picture,
+                                                            @Parameter @RequestParam String description) {
         rentalService.create(name, surface, price, picture, description, currentUser());
         return ResponseEntity.ok(Map.of("message", "Rental created !"));
     }
