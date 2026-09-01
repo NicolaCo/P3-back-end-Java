@@ -1,19 +1,30 @@
 package com.openclassrooms.estate.dto;
 
 import com.openclassrooms.estate.model.Rental;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.format.DateTimeFormatter;
 
+@Schema(description = "Rental details")
 public class RentalResponse {
 
+    @Schema(description = "Rental id", example = "1")
     private Integer id;
+    @Schema(description = "Rental name", example = "T3 House")
     private String name;
+    @Schema(description = "Surface in square meters", example = "75.0")
     private Double surface;
+    @Schema(description = "Monthly price in euros", example = "850.0")
     private Double price;
+    @Schema(description = "Picture URL", example = "/images/3f2b3c1e-ec61-42a7-9d9a-c3ee4d2b1f0a.png")
     private String picture;
+    @Schema(description = "Rental description", example = "Bright apartment near shops")
     private String description;
+    @Schema(description = "Id of the owner user", example = "1")
     private Integer owner_id;
+    @Schema(description = "Creation date, format yyyy/MM/dd", example = "2026/09/01")
     private String created_at;
+    @Schema(description = "Last update date, format yyyy/MM/dd", example = "2026/09/01")
     private String updated_at;
 
     public RentalResponse() {

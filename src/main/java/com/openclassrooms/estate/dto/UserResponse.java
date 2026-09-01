@@ -1,15 +1,22 @@
 package com.openclassrooms.estate.dto;
 
 import com.openclassrooms.estate.model.User;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.format.DateTimeFormatter;
 
+@Schema(description = "Public user details")
 public class UserResponse {
 
+    @Schema(description = "User id", example = "1")
     private Integer id;
+    @Schema(description = "User email", example = "john.doe@example.com")
     private String email;
+    @Schema(description = "User name", example = "John Doe")
     private String name;
+    @Schema(description = "Creation date, format yyyy/MM/dd", example = "2026/09/01")
     private String created_at;
+    @Schema(description = "Last update date, format yyyy/MM/dd", example = "2026/09/01")
     private String updated_at;
 
     public UserResponse(Integer id, String email, String name, String createdAt, String updatedAt ) {
