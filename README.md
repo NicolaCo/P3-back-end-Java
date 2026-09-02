@@ -20,24 +20,27 @@ Backend API for an apartment rental application (Chatop), built with **Spring Bo
 - MySQL 8+
 
 ## Installation
-
-1. Create the database:
+1. Clone this project
+2. Create the database:
    ```bash
    mysql -u root -p -e "CREATE DATABASE chatop_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
    ```
 
-2. Create the schema (tables `users`, `rentals`, `messages`):
+3. Create the schema (tables `users`, `rentals`, `messages`):
    ```bash
    mysql -u root -p chatop_db < sql/script.sql
    ```
 
-3. Copy the local configuration template:
+4. Copy the local configuration template:
    ```bash
    cp src/main/resources/application-dev.properties.example \
       src/main/resources/application-dev.properties
    ```
 
-4. Fill in the MySQL credentials and a JWT secret (base64, at least 32 bytes) in `application-dev.properties`.
+5. Fill in the MySQL credentials and a JWT secret (base64, at least 32 bytes) in `application-dev.properties`. To create a random JWT secret :
+   ```bash
+   openssl rand -base64 64
+   ```
 
 ## Profiles & Configuration
 
@@ -47,7 +50,9 @@ Backend API for an apartment rental application (Chatop), built with **Spring Bo
 | `prod` | `application-prod.properties` | Config via env vars `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`; `ddl-auto=none` |
 
 ## Database
-Tables: `users`, `rentals`, `messages` (schema in `sql/script.sql`). Uploaded pictures are stored in `src/main/resources/static/images/` (git-ignored).
+Tables: `users`, `rentals`, `messages` (script in `sql/script.sql`).
+![database](./sql/BDD.png)   
+Uploaded pictures are stored in `src/main/resources/static/images/` (git-ignored).
 
 ## Running the Application
 ```bash
