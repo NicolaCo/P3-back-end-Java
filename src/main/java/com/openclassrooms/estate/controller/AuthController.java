@@ -40,8 +40,7 @@ public class AuthController {
             @ApiResponse(responseCode = "400", description = "Invalid data or email already in use", content = @Content)
     })
     public ResponseEntity<TokenResponse> register(@Valid @RequestBody RegisterRequest request) {
-        String token = authService.register(request);
-        return ResponseEntity.ok(new TokenResponse(token));
+        return ResponseEntity.ok(authService.register(request));
     }
 
     @PostMapping("/login")
@@ -52,8 +51,7 @@ public class AuthController {
                     content = @Content(schema = @Schema(example = "{\"message\": \"error\"}")))
     })
     public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest request) {
-        String token = authService.login(request);
-        return ResponseEntity.ok(new TokenResponse(token));
+        return ResponseEntity.ok(authService.login(request));
     }
 
     @GetMapping("/me")

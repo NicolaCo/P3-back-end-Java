@@ -2,6 +2,7 @@ package com.openclassrooms.estate.service;
 
 import com.openclassrooms.estate.dto.LoginRequest;
 import com.openclassrooms.estate.dto.RegisterRequest;
+import com.openclassrooms.estate.dto.TokenResponse;
 import com.openclassrooms.estate.exception.BadRequestException;
 import com.openclassrooms.estate.model.User;
 import com.openclassrooms.estate.repository.UserRepository;
@@ -29,7 +30,7 @@ public class AuthService {
         this.jwtUtils = jwtUtils;
     }
 
-    public String register(RegisterRequest request) {
+    public TokenResponse register(RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new BadRequestException("Email already in use");
         }
@@ -38,12 +39,14 @@ public class AuthService {
         user.setName(request.getName());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         userRepository.save(user);
-        return jwtUtils.generateToken(request.getEmail());
+        String token = jwtUtils.generateToken(request.getEmail());
+        return new TokenResponse(token);
     }
 
-    public String login(LoginRequest request) {
+    public TokenResponse login(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        return jwtUtils.generateToken(request.getEmail());
+        String token = jwtUtils.generateToken(request.getEmail());
+        return new TokenResponse(token);
     }
 }

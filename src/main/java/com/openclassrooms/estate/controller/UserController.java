@@ -34,6 +34,6 @@ public class UserController {
                     content = @Content(schema = @Schema(example = "{}")))
     })
     public ResponseEntity<UserResponse> getUserById(@PathVariable Integer id) {
-        return ResponseEntity.ok(UserResponse.from(userService.getUserById(id)));
+        return ResponseEntity.ok(userService.getUserById(id));
     }
 }

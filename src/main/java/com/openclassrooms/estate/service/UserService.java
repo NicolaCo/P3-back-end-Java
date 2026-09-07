@@ -1,5 +1,6 @@
 package com.openclassrooms.estate.service;
 
+import com.openclassrooms.estate.dto.UserResponse;
 import com.openclassrooms.estate.exception.ResourceNotFoundException;
 import com.openclassrooms.estate.model.User;
 import com.openclassrooms.estate.repository.UserRepository;
@@ -14,8 +15,9 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User getUserById(Integer id) {
-        return userRepository.findById(id)
+    public UserResponse getUserById(Integer id) {
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+        return UserResponse.from(user);
     }
 }
